@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Gerente</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<header class="cabecalho">
+        <h1>Bem-vindo ao Painel de Gerente</h1>
+</header>
+<body>
+    <div class="cartao">
+        <h1>📊 Painel de Gerente</h1>
+        <p>Bem-vindo ao painel de gerente. Aqui você pode gerenciar suas operações diárias.</p>
+
+        <button onclick="mostrarQuadroFuncionaio()">Cadastrar Funcionário</button>
+        <button onclick="gerarRelatorio()">Visualizar Relatórios</button>
+        <button onclick="mostrarQuadroAvaliacoes()">Avaliações de Desempenho</button>
+        <button onclick="listadeFuncionarios()">Lista dos Funcionários</button>
+
+        <div id="quadro-cadastro" class="escondido">
+            <h2>Cadastrar Funcionário</h2>
+            <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionário">
+            <input type="text" id="cargoFuncionario" placeholder="Cargo do Funcionário">
+            <input type="number" id="salarioFuncionario" placeholder="Salário do Funcionário">
+            <input type="text" id="departamentoFuncionario" placeholder="Departamento do Funcionário">
+            <input type="text" id="emailFuncionario" placeholder="Email do Funcionário">
+            <input type="text" id="telefoneFuncionario" placeholder="Telefone do Funcionário">
+            <input type="date" id="dataAdmissaoFuncionario" placeholder="Data de Admissão do Funcionário">
+            <input type="text" id="enderecoFuncionario" placeholder="Endereço do Funcionário">
+            <button class="btn-salvar" onclick="cadastrarFuncionario()">Cadastrar</button>
+        </div>
+
+        <div class="resultados escondido" id="resultados">
+            <p>Avaliações Positivas: <span id="pos">0</span></p>
+            <p>Avaliações Negativas: <span id="neg">0</span></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script> 
+</body>
+        
+</html>
