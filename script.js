@@ -14,7 +14,7 @@ function gerarRelatorio() {
     let quantidadePositivas = 0;
     let quantidadeNegativas = 0;
 
-    // O seu loop e o seu if/else impecáveis!
+    
     for (let i = 0; i < avaliacoes.length; i++) {
         if (avaliacoes[i].nota >= 4) {
             quantidadePositivas++;
@@ -25,7 +25,22 @@ function gerarRelatorio() {
 
     document.getElementById("pos").innerText = quantidadePositivas;
     document.getElementById("neg").innerText = quantidadeNegativas;
+    document.getElementById("resultados").innerHTML = "<h2>Relatório de Avaliações</h2><p>Avaliações Positivas: " + quantidadePositivas + "</p><p>Avaliações Negativas: " + quantidadeNegativas + "</p>";
 }
+
+let listaDeFuncionarios = [];
+
+function mostrarQuadroFuncionario() {
+    let quadro = document.getElementById("quadro-cadastro");
+    // Se estiver escondido, a gente mostra. Se estiver aparecendo, a gente esconde.
+    if (quadro.classList.contains("escondido")) {
+        quadro.classList.remove("escondido");
+    } else {
+        quadro.classList.add("escondido");
+    }
+}
+
+
 
 // Função para salvar o funcionário no Array
 function salvarFuncionario() {
@@ -94,7 +109,7 @@ function salvarFuncionario() {
     alert("Funcionário " + nomeDigitado + " cadastrado com sucesso!");
     
     // Esconde o formulário de novo
-    mostrarQuadroCadastro(); 
+    mostrarQuadroFuncionario(); 
     
 }
 
