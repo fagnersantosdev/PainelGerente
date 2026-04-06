@@ -1,4 +1,4 @@
-// array de dados (Poderia vir de um banco de dados real!)
+// array de dados
 let avaliacoes = [
     { cliente: "Ana", nota: 5 },
     { cliente: "João", nota: 2 },
@@ -10,7 +10,7 @@ let avaliacoes = [
 // A função que o botão do HTML vai chamar
 function gerarRelatorio() {
     
-    // Suas variáveis zeradas
+    //variáveis zeradas
     let quantidadePositivas = 0;
     let quantidadeNegativas = 0;
 
@@ -29,6 +29,7 @@ function gerarRelatorio() {
 }
 
 let listaDeFuncionarios = [];
+let listaAvaliacoes = [];
 
 function mostrarQuadroFuncionario() {
     let quadro = document.getElementById("quadro-cadastro");
@@ -40,7 +41,15 @@ function mostrarQuadroFuncionario() {
     }
 }
 
-
+function mostrarQuadroAvaliacao() {
+    let quadro = document.getElementById("resultados");
+    // Se estiver escondido, a gente mostra. Se estiver aparecendo, a gente esconde.
+    if (quadro.classList.contains("escondido")) {
+        quadro.classList.remove("escondido");
+    } else {
+        quadro.classList.add("escondido");
+    }
+}
 
 // Função para salvar o funcionário no Array
 function salvarFuncionario() {
