@@ -1,4 +1,4 @@
-// array de dados
+// array de dados de avaliações
 let avaliacoes = [
     { cliente: "Ana", nota: 5 },
     { cliente: "João", nota: 2 },
@@ -7,14 +7,14 @@ let avaliacoes = [
     { cliente: "Lucas", nota: 5 }
 ];
 
-// A função que o botão do HTML vai chamar
+// Array de Funcionários
+let listaDeFuncionarios = [];
+
+// --- 1. FUNÇÃO DO RELATÓRIO ---
 function gerarRelatorio() {
-    
-    //variáveis zeradas
     let quantidadePositivas = 0;
     let quantidadeNegativas = 0;
 
-    
     for (let i = 0; i < avaliacoes.length; i++) {
         if (avaliacoes[i].nota >= 4) {
             quantidadePositivas++;
@@ -23,37 +23,40 @@ function gerarRelatorio() {
         }
     }
 
-    document.getElementById("pos").innerText = quantidadePositivas;
-    document.getElementById("neg").innerText = quantidadeNegativas;
-    document.getElementById("resultados").innerHTML = "<h2>Relatório de Avaliações</h2><p>Avaliações Positivas: " + quantidadePositivas + "</p><p>Avaliações Negativas: " + quantidadeNegativas + "</p>";
+    document.getElementById("quadro-relatorios").innerHTML = 
+    "<h2>Relatório de Avaliações</h2>"+
+    "<p>Avaliações Positivas: " + quantidadePositivas + "</p>" +
+    "<p>Avaliações Negativas: " + quantidadeNegativas + "</p>";
+
+    document.getElementById("quadro-relatorios").classList.remove("escondido");
+    document.getElementById("quadro-cadastro").classList.add("escondido");
+    document.getElementById("quadro-lista").classList.add("escondido");
 }
 
-let listaDeFuncionarios = [];
-let listaAvaliacoes = [];
+// --- 2. FUNÇÃO PARA ABRIR A TELA DE CADASTRO ---
+function mostrarQuadroCadastro() {
+    document.getElementById("quadro-cadastro").classList.remove("escondido");
+    document.getElementById("quadro-lista").classList.add("escondido");
+    document.getElementById("quadro-relatorios").classList.add("escondido");
+}
 
-function mostrarQuadroFuncionario() {
-    let quadro = document.getElementById("quadro-cadastro");
-    // Se estiver escondido, a gente mostra. Se estiver aparecendo, a gente esconde.
-    if (quadro.classList.contains("escondido")) {
-        quadro.classList.remove("escondido");
-    } else {
-        quadro.classList.add("escondido");
+// --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS (Mudei o nome para atualizarLista!) ---
+function atualizarListaFuncionarios() {
+    let listaHTML = "<h2>Lista de Funcionários</h2><ul>";
+    for (let i = 0; i < listaDeFuncionarios.length; i++) {
+        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + "</li>";
     }
-}
+    listaHTML += "</ul>";
+    
+    document.getElementById("quadro-lista").innerHTML = listaHTML;
 
-function mostrarQuadroAvaliacao() {
-    let quadro = document.getElementById("resultados");
-    // Se estiver escondido, a gente mostra. Se estiver aparecendo, a gente esconde.
-    if (quadro.classList.contains("escondido")) {
-        quadro.classList.remove("escondido");
-    } else {
-        quadro.classList.add("escondido");
-    }
-}
+    document.getElementById("quadro-lista").classList.remove("escondido");
+    document.getElementById("quadro-cadastro").classList.add("escondido");
+    document.getElementById("quadro-relatorios").classList.add("escondido");
+} // <- OLHA A CHAVE FECHANDO AQUI!
 
-// Função para salvar o funcionário no Array
+// --- 4. FUNÇÃO PARA SALVAR O FUNCIONÁRIO ---
 function salvarFuncionario() {
-    // 1. Pega o que o usuário digitou usando o ".value"
     let nomeDigitado = document.getElementById("inputNome").value;
     let cargoDigitado = document.getElementById("inputCargo").value;
     let salarioFuncionario = document.getElementById("inputSalario").value;
@@ -63,7 +66,6 @@ function salvarFuncionario() {
     let telefoneFuncionario = document.getElementById("inputTelefone").value;
     let enderecoFuncionario = document.getElementById("inputEndereco").value;
 
-    // 2. Verificamos se ele não deixou em branco
     switch (true) {
         case nomeDigitado === "":
             alert("Por favor, preencha o nome do funcionário.");
@@ -89,9 +91,7 @@ function salvarFuncionario() {
         case enderecoFuncionario === "":
             alert("Por favor, preencha o endereço do funcionário.");
             return;
-
     }
-
 
     let novoFuncionario = {
         nome: nomeDigitado,
@@ -103,9 +103,9 @@ function salvarFuncionario() {
         telefone: telefoneFuncionario,
         endereco: enderecoFuncionario
     };
+    
     listaDeFuncionarios.push(novoFuncionario);
 
-    // 4. Limpando os inputs para o próximo cadastro e damos um aviso
     document.getElementById("inputNome").value = "";
     document.getElementById("inputCargo").value = "";
     document.getElementById("inputSalario").value = "";
@@ -117,18 +117,6 @@ function salvarFuncionario() {
 
     alert("Funcionário " + nomeDigitado + " cadastrado com sucesso!");
     
-    // Esconde o formulário de novo
-    mostrarQuadroFuncionario(); 
-    
-}
-
-function listadeFuncionarios() {
-    // Função para exibir a lista de funcionários
-    let listaHTML = "<h2>Lista de Funcionários</h2><ul>";
-    for (let i = 0; i < listaDeFuncionarios.length; i++) {
-        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + "</li>";
-    }
-    listaHTML += "</ul>";
-    document.getElementById("resultados").innerHTML = listaHTML;
-
+    // Agora chamamos a função com o nome correto para exibir a lista e fechar o cadastro!
+    atualizarListaFuncionarios(); 
 }
