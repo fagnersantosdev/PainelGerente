@@ -1,35 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gerente</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
-<header class="cabecalho">
-        <h1>Bem-vindo ao Painel de Gerente</h1>
-</header>
 <body>
+    <header class="cabecalho">
+        <h1>Bem-vindo ao Painel de Gerente</h1>
+    </header>
+
     <div class="cartao">
-        <h1>📊 Painel de Gerente</h1>
-        <p>Bem-vindo ao painel de gerente. Aqui você pode gerenciar suas operações diárias.</p>
+        <h2>📊 Painel de Controle</h2>
+        <p>Gerencie suas operações diárias abaixo.</p>
 
         <button onclick="mostrarQuadroCadastro()">➕ Cadastrar Funcionário</button>
-        <button onclick="gerarRelatorio()">📊 Visualizar Relatórios</button>
-        <button onclick="mostrarQuadroAvaliacoes()">Avaliações de Desempenho</button>
         <button onclick="atualizarListaFuncionarios()">📋 Lista dos Funcionários</button>
+        <button onclick="gerarRelatorio()">📊 Visualizar Relatórios</button>
+        <button onclick="mostrarQuadroAvaliacoes()">⭐ Avaliações de Desempenho</button>
 
         <div id="quadro-cadastro" class="escondido">
             <h2>Cadastrar Funcionário</h2>
-            <input type="text" id="nomeFuncionario" placeholder="Nome do Funcionário">
-            <input type="text" id="cargoFuncionario" placeholder="Cargo do Funcionário">
-            <input type="number" id="salarioFuncionario" placeholder="Salário do Funcionário">
-            <input type="text" id="departamentoFuncionario" placeholder="Departamento do Funcionário">
-            <input type="text" id="emailFuncionario" placeholder="Email do Funcionário">
-            <input type="text" id="telefoneFuncionario" placeholder="Telefone do Funcionário">
-            <input type="date" id="dataAdmissaoFuncionario" placeholder="Data de Admissão do Funcionário">
-            <input type="text" id="enderecoFuncionario" placeholder="Endereço do Funcionário">
+            <input type="text" id="inputNome" placeholder="Nome do Funcionário">
+            <input type="text" id="inputCargo" placeholder="Cargo do Funcionário">
+            <input type="number" id="inputSalario" placeholder="Salário do Funcionário">
+            <input type="text" id="inputDepartamento" placeholder="Departamento">
+            <input type="email" id="inputEmail" placeholder="Email do Funcionário">
+            <input type="text" id="inputTelefone" placeholder="Telefone">
+            <input type="date" id="inputData" placeholder="Data de Admissão">
+            <input type="text" id="inputEndereco" placeholder="Endereço">
             <button class="btn-salvar" onclick="salvarFuncionario()">Cadastrar</button>
         </div>
 
@@ -39,7 +39,12 @@
         <div class="escondido" id="quadro-relatorios">
         </div>
 
+        <div class="escondido" id="quadro-avaliacoes">
+            <h2>Avaliações da Equipe</h2>
+            <p>Em breve...</p>
+        </div>
+    </div>
+
     <script src="script.js"></script> 
 </body>
-        
 </html>
