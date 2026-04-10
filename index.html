@@ -30,6 +30,7 @@
             <input type="text" id="inputTelefone" placeholder="Telefone">
             <input type="date" id="inputData" placeholder="Data de Admissão">
             <input type="text" id="inputEndereco" placeholder="Endereço">
+            <br>
             <button class="btn-salvar" onclick="salvarFuncionario()">Cadastrar</button>
         </div>
 
@@ -40,8 +41,20 @@
         </div>
 
         <div class="escondido" id="quadro-avaliacoes">
-            <h2>Avaliações da Equipe</h2>
-            <p>Em breve...</p>
+            <h2>⭐ Avaliações de Desempenho</h2>
+            <p>Avalie os funcionários da sua equipe:</p>
+
+            <select id="selectFuncionario">
+                <option value="">Selecione um funcionário...</option>
+            </select>
+
+            <input type="number" id="inputNota" min="1" max="5" placeholder="Nota (1 a 5)">
+
+            <button class="btn-salvar" onclick="salvarAvaliacao()">Salvar Avaliação</button>
+
+            <h3>Histórico da Equipe</h3>
+            <div id="historico-avaliacoes">
+            </div>
         </div>
     </div>
 

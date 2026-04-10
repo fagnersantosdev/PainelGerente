@@ -9,6 +9,8 @@ let avaliacoes = [
 
 // Array de Funcionários
 let listaDeFuncionarios = [];
+// --- NOVO ARRAY PARA AS NOTAS DA EQUIPE ---
+let avaliacoesDesempenho = [];
 
 // --- 1. FUNÇÃO DO RELATÓRIO ---
 function gerarRelatorio() {
@@ -40,11 +42,11 @@ function mostrarQuadroCadastro() {
     document.getElementById("quadro-relatorios").classList.add("escondido");
 }
 
-// --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS (Mudei o nome para atualizarLista!) ---
+// --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS ---
 function atualizarListaFuncionarios() {
     let listaHTML = "<h2>Lista de Funcionários</h2><ul>";
     for (let i = 0; i < listaDeFuncionarios.length; i++) {
-        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + "</li>";
+        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + " <button onclick='deletarFuncionario(" + i + ")'>Deletar</button></li>";
     }
     listaHTML += "</ul>";
     
@@ -119,4 +121,91 @@ function salvarFuncionario() {
     
     // Agora chamamos a função com o nome correto para exibir a lista e fechar o cadastro!
     atualizarListaFuncionarios(); 
+}
+
+// Função para remover um funcionário do Array
+function deletarFuncionario(posicaoDoItem) {
+    // Pede confirmação antes de apagar (Regra de segurança clássica de sistemas)
+    let confirmar = confirm("Tem certeza que deseja apagar este funcionário?");
+    
+    if (confirmar === true) {
+        // O .splice vai exatamente na posição (índice) informada e deleta 1 item
+        listaDeFuncionarios.splice(posicaoDoItem, 1);
+        
+        // Como o Array mudou, mandamos o JS desenhar a lista na tela de novo!
+        atualizarListaFuncionarios();
+    }
+}
+
+
+// --- FUNÇÃO PARA ABRIR A TELA (E PREENCHER OS NOMES) ---
+function mostrarQuadroAvaliacoes() {
+    // Mostra o quadro de avaliações e esconde o resto
+    document.getElementById("quadro-avaliacoes").classList.remove("escondido");
+    document.getElementById("quadro-cadastro").classList.add("escondido");
+    document.getElementById("quadro-lista").classList.add("escondido");
+    document.getElementById("quadro-relatorios").classList.add("escondido");
+
+    // --- A MÁGICA ACONTECE AQUI ---
+    // Pegamos a caixa de seleção (dropdown)
+    let select = document.getElementById("selectFuncionario");
+    
+    // Limpamos ela (para não duplicar os nomes se o gerente clicar duas vezes)
+    select.innerHTML = '<option value="">Selecione um funcionário...</option>';
+
+    // Fazemos um loop na NOSSA LISTA DE FUNCIONÁRIOS para criar as opções
+    for (let i = 0; i < listaDeFuncionarios.length; i++) {
+        // Exemplo do que ele cria: <option value="João">João</option>
+        select.innerHTML += '<option value="' + listaDeFuncionarios[i].nome + '">' + listaDeFuncionarios[i].nome + '</option>';
+    }
+}
+
+// --- FUNÇÃO PARA SALVAR A NOTA ---
+function salvarAvaliacao() {
+    let nomeSelecionado = document.getElementById("selectFuncionario").value;
+    let notaDigitada = document.getElementById("inputNota").value;
+
+    // Aquele guarda de segurança clássico!
+    if (nomeSelecionado === "") {
+        alert("Por favor, selecione um funcionário.");
+        return;
+    }
+    if (notaDigitada < 1 || notaDigitada > 5 || notaDigitada === "") {
+        alert("A nota deve ser um número entre 1 e 5.");
+        return;
+    }
+
+    // Cria o objeto e empurra pro nosso novo array
+    let novaAvaliacao = {
+        funcionario: nomeSelecionado,
+        nota: Number(notaDigitada) // O "Number" garante que o JS salve como número e não como texto
+    };
+    avaliacoesDesempenho.push(novaAvaliacao);
+
+    // Limpa a nota digitada
+    document.getElementById("inputNota").value = "";
+    
+    // Chama a função para desenhar a lista na tela
+    atualizarListaAvaliacoes();
+}
+
+// --- FUNÇÃO PARA DESENHAR O HISTÓRICO NA TELA ---
+function atualizarListaAvaliacoes() {
+    let historicoHTML = "<ul>";
+    
+    for (let i = 0; i < avaliacoesDesempenho.length; i++) {
+        
+        // TRUQUE NINJA: Um mini-loop para desenhar estrelinhas no lugar de números
+        let estrelas = "";
+        for (let j = 0; j < avaliacoesDesempenho[i].nota; j++) {
+            estrelas += "⭐";
+        }
+
+        historicoHTML += "<li><strong>" + avaliacoesDesempenho[i].funcionario + "</strong> recebeu: " + estrelas + "</li>";
+    }
+    
+    historicoHTML += "</ul>";
+    
+    // Injeta na tela
+    document.getElementById("historico-avaliacoes").innerHTML = historicoHTML;
 }
