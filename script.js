@@ -33,6 +33,7 @@ function gerarRelatorio() {
     document.getElementById("quadro-relatorios").classList.remove("escondido");
     document.getElementById("quadro-cadastro").classList.add("escondido");
     document.getElementById("quadro-lista").classList.add("escondido");
+    document.getElementById("quadro-avaliacoes").classList.add("escondido");
 }
 
 // --- 2. FUNÇÃO PARA ABRIR A TELA DE CADASTRO ---
@@ -40,13 +41,14 @@ function mostrarQuadroCadastro() {
     document.getElementById("quadro-cadastro").classList.remove("escondido");
     document.getElementById("quadro-lista").classList.add("escondido");
     document.getElementById("quadro-relatorios").classList.add("escondido");
+    document.getElementById("quadro-avaliacoes").classList.add("escondido");
 }
 
 // --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS ---
 function atualizarListaFuncionarios() {
     let listaHTML = "<h2>Lista de Funcionários</h2><ul>";
     for (let i = 0; i < listaDeFuncionarios.length; i++) {
-        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + " <button onclick='deletarFuncionario(" + i + ")'>Deletar</button></li>";
+        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + " <button onclick='deletarFuncionario(" + i + ")'>❌ Demitir</button></li>";
     }
     listaHTML += "</ul>";
     
@@ -55,7 +57,8 @@ function atualizarListaFuncionarios() {
     document.getElementById("quadro-lista").classList.remove("escondido");
     document.getElementById("quadro-cadastro").classList.add("escondido");
     document.getElementById("quadro-relatorios").classList.add("escondido");
-} // <- OLHA A CHAVE FECHANDO AQUI!
+    document.getElementById("quadro-avaliacoes").classList.add("escondido");
+} 
 
 // --- 4. FUNÇÃO PARA SALVAR O FUNCIONÁRIO ---
 function salvarFuncionario() {
@@ -123,17 +126,24 @@ function salvarFuncionario() {
     atualizarListaFuncionarios(); 
 }
 
-// Função para remover um funcionário do Array
-function deletarFuncionario(posicaoDoItem) {
-    // Pede confirmação antes de apagar (Regra de segurança clássica de sistemas)
-    let confirmar = confirm("Tem certeza que deseja apagar este funcionário?");
+// --- FUNÇÃO PARA DEMITIR (DELETAR) UM FUNCIONÁRIO ---
+// A variável "posicao" recebe aquele número "i" do botão!
+function deletarFuncionario(posicao) {
     
-    if (confirmar === true) {
-        // O .splice vai exatamente na posição (índice) informada e deleta 1 item
-        listaDeFuncionarios.splice(posicaoDoItem, 1);
+    // 1. Pergunta de segurança
+    let temCerteza = confirm("Tem certeza que deseja demitir o(a) " + listaDeFuncionarios[posicao].nome + "?");
+    
+    // 2. Se clicar em "OK", o confirm devolve true.
+    if (temCerteza === true) {
         
-        // Como o Array mudou, mandamos o JS desenhar a lista na tela de novo!
+        // 3. O splice vai na posição exata e arranca 1 item de lá
+        listaDeFuncionarios.splice(posicao, 1);
+        
+        // 4. Como o Array encolheu, desenha a lista na tela de novo!
         atualizarListaFuncionarios();
+        
+        // Bônus: Um alert para confirmar a ação
+        alert("Funcionário removido do sistema.");
     }
 }
 
@@ -146,14 +156,14 @@ function mostrarQuadroAvaliacoes() {
     document.getElementById("quadro-lista").classList.add("escondido");
     document.getElementById("quadro-relatorios").classList.add("escondido");
 
-    // --- A MÁGICA ACONTECE AQUI ---
-    // Pegamos a caixa de seleção (dropdown)
+
+    // Pegar a caixa de seleção (dropdown)
     let select = document.getElementById("selectFuncionario");
     
-    // Limpamos ela (para não duplicar os nomes se o gerente clicar duas vezes)
+    // Limpar ela (para não duplicar os nomes se o gerente clicar duas vezes)
     select.innerHTML = '<option value="">Selecione um funcionário...</option>';
 
-    // Fazemos um loop na NOSSA LISTA DE FUNCIONÁRIOS para criar as opções
+    // Loop na LISTA DE FUNCIONÁRIOS para criar as opções
     for (let i = 0; i < listaDeFuncionarios.length; i++) {
         // Exemplo do que ele cria: <option value="João">João</option>
         select.innerHTML += '<option value="' + listaDeFuncionarios[i].nome + '">' + listaDeFuncionarios[i].nome + '</option>';
@@ -165,7 +175,7 @@ function salvarAvaliacao() {
     let nomeSelecionado = document.getElementById("selectFuncionario").value;
     let notaDigitada = document.getElementById("inputNota").value;
 
-    // Aquele guarda de segurança clássico!
+    
     if (nomeSelecionado === "") {
         alert("Por favor, selecione um funcionário.");
         return;
@@ -175,7 +185,7 @@ function salvarAvaliacao() {
         return;
     }
 
-    // Cria o objeto e empurra pro nosso novo array
+    // Cria o objeto e empurra pro novo array
     let novaAvaliacao = {
         funcionario: nomeSelecionado,
         nota: Number(notaDigitada) // O "Number" garante que o JS salve como número e não como texto
@@ -209,3 +219,5 @@ function atualizarListaAvaliacoes() {
     // Injeta na tela
     document.getElementById("historico-avaliacoes").innerHTML = historicoHTML;
 }
+
+

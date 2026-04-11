@@ -22,7 +22,7 @@ body {
 
 .cartao {
     background-color: white;
-    padding: 30px 50px;
+    padding: 50px 50px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     text-align: center;
@@ -44,7 +44,7 @@ button {
 }
 
 button:hover {
-    background-color: #3c32d3;
+    background-color: #0740db;
 }
 
 .resultados {
@@ -82,4 +82,14 @@ input {
     border-radius: 8px;
     margin-top: 15px;
     border: 1px solid #ddd;
+}
+
+.btn-deletar {
+    background-color: #dc3545;
+    padding: 2px 8px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+.btn-deletar:hover {
+    background-color: #c82333;
 }
