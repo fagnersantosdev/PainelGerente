@@ -7,10 +7,26 @@ let avaliacoes = [
     { cliente: "Lucas", nota: 5 }
 ];
 
-// Array de Funcionários
+// variáveis começam vazias
 let listaDeFuncionarios = [];
-// --- NOVO ARRAY PARA AS NOTAS DA EQUIPE ---
 let avaliacoesDesempenho = [];
+
+// LER O LOCALSTORAGE QUANDO A PÁGINA ABRE ---
+// Procuramos se já existe algo salvo com a chave "meusFuncionarios"
+let funcionariosSalvos = localStorage.getItem("meusFuncionarios");
+
+// Se existir algo salvo (!== null significa "se não for nulo")
+if (funcionariosSalvos !== null) {
+    // |O texto volta para Array!
+    listaDeFuncionarios = JSON.parse(funcionariosSalvos);
+}
+
+// Procuramos se existem avaliações salvas
+let avaliacoesSalvas = localStorage.getItem("minhasAvaliacoes");
+
+if (avaliacoesSalvas !== null) {
+    avaliacoesDesempenho = JSON.parse(avaliacoesSalvas);
+}
 
 // --- 1. FUNÇÃO DO RELATÓRIO ---
 function gerarRelatorio() {
@@ -122,6 +138,7 @@ function salvarFuncionario() {
 
     alert("Funcionário " + nomeDigitado + " cadastrado com sucesso!");
     
+    salvarDadosNoNavegador();
     // Agora chamamos a função com o nome correto para exibir a lista e fechar o cadastro!
     atualizarListaFuncionarios(); 
 }
@@ -139,6 +156,7 @@ function deletarFuncionario(posicao) {
         // 3. O splice vai na posição exata e arranca 1 item de lá
         listaDeFuncionarios.splice(posicao, 1);
         
+        salvarDadosNoNavegador();
         // 4. Como o Array encolheu, desenha a lista na tela de novo!
         atualizarListaFuncionarios();
         
@@ -194,6 +212,8 @@ function salvarAvaliacao() {
 
     // Limpa a nota digitada
     document.getElementById("inputNota").value = "";
+
+    salvarDadosNoNavegador();
     
     // Chama a função para desenhar a lista na tela
     atualizarListaAvaliacoes();
@@ -220,4 +240,14 @@ function atualizarListaAvaliacoes() {
     document.getElementById("historico-avaliacoes").innerHTML = historicoHTML;
 }
 
+// --- MÁGICA 2: A FUNÇÃO QUE SALVA NO CADERNINHO ---
+function salvarDadosNoNavegador() {
+    // Empacota o Array de funcionários em formato de texto e salva
+    let listaEmTexto = JSON.stringify(listaDeFuncionarios);
+    localStorage.setItem("meusFuncionarios", listaEmTexto);
+
+    // Empacota o Array de avaliações e salva também
+    let avaliacoesEmTexto = JSON.stringify(avaliacoesDesempenho);
+    localStorage.setItem("minhasAvaliacoes", avaliacoesEmTexto);
+}
 
