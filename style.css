@@ -73,7 +73,7 @@ input {
 }
 
 .btn-salvar:hover {
-    background-color: #0056b3;
+    background-color: #0740db;
 }
 
 #quadro-cadastro {
@@ -92,4 +92,15 @@ input {
 }
 .btn-deletar:hover {
     background-color: #c82333;
+}
+
+.btn-buscar {
+    background-color: #007bff;
+    padding: 10px 8px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.btn-buscar:hover {
+    background-color: #0740db;
 }

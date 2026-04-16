@@ -12,16 +12,16 @@ let listaDeFuncionarios = [];
 let avaliacoesDesempenho = [];
 
 // LER O LOCALSTORAGE QUANDO A PÁGINA ABRE ---
-// Procuramos se já existe algo salvo com a chave "meusFuncionarios"
+// Procura se já existe algo salvo com a chave "meusFuncionarios"
 let funcionariosSalvos = localStorage.getItem("meusFuncionarios");
 
 // Se existir algo salvo (!== null significa "se não for nulo")
 if (funcionariosSalvos !== null) {
-    // |O texto volta para Array!
+    // O texto volta para o Array!
     listaDeFuncionarios = JSON.parse(funcionariosSalvos);
 }
 
-// Procuramos se existem avaliações salvas
+// Procura se existem avaliações salvas
 let avaliacoesSalvas = localStorage.getItem("minhasAvaliacoes");
 
 if (avaliacoesSalvas !== null) {
@@ -76,6 +76,52 @@ function atualizarListaFuncionarios() {
     document.getElementById("quadro-avaliacoes").classList.add("escondido");
 } 
 
+// --- FUNÇÃO DE API ---
+// A palavra 'async' avisa o JavaScript: "Calma, essa função vai demorar um pouco"
+async function buscarCepDaInternet() {
+    
+    // 1. Pega o CEP que o gerente digitou
+    let cepDigitado = document.getElementById("inputCep").value;
+
+    // Se o CEP estiver vazio, não fazemos nada
+    if (cepDigitado === "") {
+        alert("Por favor, digite um CEP primeiro.");
+        return;
+    }
+
+    // Troca o texto do botão para o gerente saber que estamos carregando
+    document.getElementById("inputEndereco").value = "Buscando na internet...";
+
+    try {
+        // 2. (fetch)
+        // O 'await' significa: "Pause o código AQUI e espere a resposta da internet chegar"
+        let respostaDoServidor = await fetch("https://viacep.com.br/ws/" + cepDigitado + "/json/");
+        
+        // 3. (json)
+        // Transforma a resposta da internet em um Objeto JS que a gente entende
+        let dadosDoEndereco = await respostaDoServidor.json();
+
+        // Se o CEP não existir, a API devolve um erro escondido
+        if (dadosDoEndereco.erro) {
+            document.getElementById("inputEndereco").value = "";
+            alert("CEP não encontrado. Verifique os números.");
+            return;
+        }
+
+        // 4. MÁGICA NA TELA!
+        // Monta o endereço com as peças que vieram da API e joga no input
+        document.getElementById("inputEndereco").value = 
+            dadosDoEndereco.logradouro + ", Bairro: " + 
+            dadosDoEndereco.bairro + " - " + 
+            dadosDoEndereco.localidade + "/" + dadosDoEndereco.uf;
+
+    } catch (erro) {
+        // Se a internet cair no meio do caminho, o bloco 'catch' captura o erro para o site não quebrar
+        document.getElementById("inputEndereco").value = "";
+        alert("Erro ao conectar com a API dos Correios. Verifique sua internet.");
+    }
+}
+
 // --- 4. FUNÇÃO PARA SALVAR O FUNCIONÁRIO ---
 function salvarFuncionario() {
     let nomeDigitado = document.getElementById("inputNome").value;
@@ -112,6 +158,12 @@ function salvarFuncionario() {
         case enderecoFuncionario === "":
             alert("Por favor, preencha o endereço do funcionário.");
             return;
+        case cepFuncionario === "":
+            alert("Por favor, preencha o CEP do funcionário.");
+            return;
+        case numFucionario === "":
+            alert("Por favor, preencha o número local do funcionário.");
+            return;
     }
 
     let novoFuncionario = {
@@ -122,7 +174,9 @@ function salvarFuncionario() {
         departamento: departamentoFuncionario,
         email: emailFuncionario,
         telefone: telefoneFuncionario,
-        endereco: enderecoFuncionario
+        endereco: enderecoFuncionario,
+        cep: cepFuncionario,
+        numero: numFucionario
     };
     
     listaDeFuncionarios.push(novoFuncionario);
@@ -135,12 +189,14 @@ function salvarFuncionario() {
     document.getElementById("inputEmail").value = "";
     document.getElementById("inputTelefone").value = "";
     document.getElementById("inputEndereco").value = "";
+    document.getElementById("inputCep").value = "";
+    document.getElementById("inputNumero").value = "";
 
     alert("Funcionário " + nomeDigitado + " cadastrado com sucesso!");
     
-    salvarDadosNoNavegador();
-    // Agora chamamos a função com o nome correto para exibir a lista e fechar o cadastro!
-    atualizarListaFuncionarios(); 
+    avaliacoesDesempenho.push(novaAvaliacao);
+    salvarDadosNoNavegador(); // Salva as novas notas no navegador!
+    atualizarListaFuncionarios(); // Atualiza a lista para mostrar o novo funcionário
 }
 
 // --- FUNÇÃO PARA DEMITIR (DELETAR) UM FUNCIONÁRIO ---
@@ -156,8 +212,7 @@ function deletarFuncionario(posicao) {
         // 3. O splice vai na posição exata e arranca 1 item de lá
         listaDeFuncionarios.splice(posicao, 1);
         
-        salvarDadosNoNavegador();
-        // 4. Como o Array encolheu, desenha a lista na tela de novo!
+        salvarDadosNoNavegador(); // Salva a lista atualizada (sem o demitido) no navegador!
         atualizarListaFuncionarios();
         
         // Bônus: Um alert para confirmar a ação
@@ -238,9 +293,11 @@ function atualizarListaAvaliacoes() {
     
     // Injeta na tela
     document.getElementById("historico-avaliacoes").innerHTML = historicoHTML;
+
+    salvarDadosNoNavegador();
 }
 
-// --- MÁGICA 2: A FUNÇÃO QUE SALVA NO CADERNINHO ---
+// --- A FUNÇÃO QUE SALVA NO site - localStorage ---
 function salvarDadosNoNavegador() {
     // Empacota o Array de funcionários em formato de texto e salva
     let listaEmTexto = JSON.stringify(listaDeFuncionarios);
