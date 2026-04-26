@@ -145,7 +145,9 @@ function salvarFuncionario() {
     let departamentoFuncionario = document.getElementById("inputDepartamento").value;
     let emailFuncionario = document.getElementById("inputEmail").value;
     let telefoneFuncionario = document.getElementById("inputTelefone").value;
+    let cepFuncionario = document.getElementById("inputCep").value;
     let enderecoFuncionario = document.getElementById("inputEndereco").value;
+    let numFucionario = document.getElementById("inputNumero").value;
 
     switch (true) {
         case nomeDigitado === "":
@@ -169,11 +171,11 @@ function salvarFuncionario() {
         case telefoneFuncionario === "":
             alert("Por favor, preencha o telefone do funcionário.");
             return;
-        case enderecoFuncionario === "":
-            alert("Por favor, preencha o endereço do funcionário.");
-            return;
         case cepFuncionario === "":
             alert("Por favor, preencha o CEP do funcionário.");
+            return;
+        case enderecoFuncionario === "":
+            alert("Por favor, preencha o endereço do funcionário.");
             return;
         case numFucionario === "":
             alert("Por favor, preencha o número local do funcionário.");
@@ -187,9 +189,9 @@ function salvarFuncionario() {
         dataAdmissao: dataAdmissao,
         departamento: departamentoFuncionario,
         email: emailFuncionario,
-        telefone: telefoneFuncionario,
-        endereco: enderecoFuncionario,
+        telefone: telefoneFuncionario, 
         cep: cepFuncionario,
+        endereco: enderecoFuncionario,
         numero: numFucionario
     };
     
@@ -202,8 +204,8 @@ function salvarFuncionario() {
     document.getElementById("inputDepartamento").value = "";
     document.getElementById("inputEmail").value = "";
     document.getElementById("inputTelefone").value = "";
-    document.getElementById("inputEndereco").value = "";
     document.getElementById("inputCep").value = "";
+    document.getElementById("inputEndereco").value = "";
     document.getElementById("inputNumero").value = "";
 
     alert("Funcionário " + nomeDigitado + " cadastrado com sucesso!");
