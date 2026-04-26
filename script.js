@@ -28,29 +28,35 @@ if (avaliacoesSalvas !== null) {
     avaliacoesDesempenho = JSON.parse(avaliacoesSalvas);
 }
 
-// --- 1. FUNÇÃO DO RELATÓRIO ---
+
+// --- 1. FUNÇÃO DO RELATÓRIO (MODO SÊNIOR) ---
 function gerarRelatorio() {
-    let quantidadePositivas = 0;
-    let quantidadeNegativas = 0;
+    let quadroRelatorios = document.getElementById("quadro-relatorios");
 
-    for (let i = 0; i < avaliacoes.length; i++) {
-        if (avaliacoes[i].nota >= 4) {
-            quantidadePositivas++;
-        } else {
-            quantidadeNegativas++;
-        }
+    if (avaliacoesDesempenho.length === 0) {
+        quadroRelatorios.innerHTML = "<h2>📊 Relatório da Equipe</h2><p>Nenhuma avaliação foi registrada ainda.</p>";
+    } else {
+        
+        // O .reduce() rola pelo array somando as notas. 
+        // O "0" no final é o valor inicial do cofrinho.
+        let somaDasNotas = avaliacoesDesempenho.reduce((cofrinho, avaliacaoAtual) => {
+            return cofrinho + avaliacaoAtual.nota;
+        }, 0);
+
+        let media = somaDasNotas / avaliacoesDesempenho.length;
+
+        quadroRelatorios.innerHTML = 
+            "<h2>📊 Relatório de Desempenho</h2>" +
+            "<p>Total de avaliações: <strong>" + avaliacoesDesempenho.length + "</strong></p>" +
+            "<p>Média geral da equipe: <strong>" + media.toFixed(1) + " ⭐</strong></p>"; 
     }
-
-    document.getElementById("quadro-relatorios").innerHTML = 
-    "<h2>Relatório de Avaliações</h2>"+
-    "<p>Avaliações Positivas: " + quantidadePositivas + "</p>" +
-    "<p>Avaliações Negativas: " + quantidadeNegativas + "</p>";
 
     document.getElementById("quadro-relatorios").classList.remove("escondido");
     document.getElementById("quadro-cadastro").classList.add("escondido");
     document.getElementById("quadro-lista").classList.add("escondido");
     document.getElementById("quadro-avaliacoes").classList.add("escondido");
 }
+
 
 // --- 2. FUNÇÃO PARA ABRIR A TELA DE CADASTRO ---
 function mostrarQuadroCadastro() {
@@ -60,21 +66,29 @@ function mostrarQuadroCadastro() {
     document.getElementById("quadro-avaliacoes").classList.add("escondido");
 }
 
-// --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS ---
+
+// --- 3. FUNÇÃO DA LISTA DE FUNCIONÁRIOS (MODO SÊNIOR) ---
 function atualizarListaFuncionarios() {
-    let listaHTML = "<h2>Lista de Funcionários</h2><ul>";
-    for (let i = 0; i < listaDeFuncionarios.length; i++) {
-        listaHTML += "<li>" + listaDeFuncionarios[i].nome + " - " + listaDeFuncionarios[i].cargo + " <button onclick='deletarFuncionario(" + i + ")'>❌ Demitir</button></li>";
-    }
-    listaHTML += "</ul>";
+    
+    // O .map() pega cada "funcionario" (e o seu "index" numérico) e transforma numa tag <li>!
+    // O .join('') no final junta tudo num texto só, tirando as vírgulas.
+    let itensDaLista = listaDeFuncionarios.map((funcionario, index) => {
+        return "<li>" + funcionario.nome + " - " + funcionario.cargo + 
+               " <button class='btn-deletar' onclick='deletarFuncionario(" + index + ")'>❌ Demitir</button></li>";
+    }).join('');
+    
+    // Montamos o HTML final
+    let listaHTML = "<h2>📋 Lista de Funcionários</h2><ul>" + itensDaLista + "</ul>";
     
     document.getElementById("quadro-lista").innerHTML = listaHTML;
 
+    // A navegação continua igual
     document.getElementById("quadro-lista").classList.remove("escondido");
     document.getElementById("quadro-cadastro").classList.add("escondido");
     document.getElementById("quadro-relatorios").classList.add("escondido");
     document.getElementById("quadro-avaliacoes").classList.add("escondido");
-} 
+}
+
 
 // --- FUNÇÃO DE API ---
 // A palavra 'async' avisa o JavaScript: "Calma, essa função vai demorar um pouco"
